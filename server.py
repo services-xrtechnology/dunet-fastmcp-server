@@ -121,10 +121,8 @@ def crear_cotizacion_dunet(
         }
 
 
-@mcp.get("/health")
-def health_check():
-    """Health check para Digital Ocean"""
-    return {"status": "ok", "service": "dunet-fastmcp", "tools": 2}
+# Health check será manejado por el wrapper de FastAPI en app/main.py
+# FastMCP no soporta rutas HTTP custom directamente
 
 if __name__ == "__main__":
     # Iniciar servidor FastMCP
