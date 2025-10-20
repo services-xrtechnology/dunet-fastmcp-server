@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dunet FastMCP Admin</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Dunet FastMCP Server</h1>
+            <p class="subtitle">Portal de Administración</p>
+        </header>
+
+        <nav>
+            <a href="/" class="active">Dashboard</a>
+            <a href="/config">Configuración</a>
+            <a href="/logs">Logs</a>
+            <a href="/mcp" target="_blank">MCP Endpoint</a>
+        </nav>
+
+        <div class="dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Estado del Servidor</h3>
+                    <p class="status running">● En línea</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Herramientas Activas</h3>
+                    <p class="big-number">2</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Configuración</h3>
+                    <p class="status {% if config %}ok{% else %}pending{% endif %}">
+                        {% if config %}✅ Configurado{% else %}⚠️ Pendiente{% endif %}
+                    </p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Conexión Odoo</h3>
+                    <button onclick="testConnection()" class="btn-test">Probar Conexión</button>
+                    <p id="connection-status"></p>
+                </div>
+            </div>
+
+            <div class="tools-section">
+                <h2>🛠️ Herramientas MCP</h2>
+                <div class="tools-list">
+                    <div class="tool-card">
+                        <h3>consultar_rnc_dgii</h3>
+                        <p>Consulta RNC/Cédula en portal DGII de República Dominicana</p>
+                        <div class="tool-stats">
+                            <span>Estado: <strong class="enabled">Activa</strong></span>
+                            <span>Llamadas: <strong>0</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="tool-card">
+                        <h3>crear_cotizacion_dunet</h3>
+                        <p>Crea cotizaciones automáticas en Odoo según plan seleccionado</p>
+                        <div class="tool-stats">
+                            <span>Estado: <strong class="enabled">Activa</strong></span>
+                            <span>Llamadas: <strong>0</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>📡 Información de Conexión</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>URL MCP:</label>
+                        <code id="mcp-url">http://localhost:8070/mcp</code>
+                        <button onclick="copyUrl()" class="btn-copy">Copiar</button>
+                    </div>
+
+                    {% if config %}
+                    <div class="info-item">
+                        <label>Odoo URL:</label>
+                        <code>{{ config.odoo_url }}</code>
+                    </div>
+                    <div class="info-item">
+                        <label>Database:</label>
+                        <code>{{ config.odoo_db }}</code>
+                    </div>
+                    <div class="info-item">
+                        <label>Usuario:</label>
+                        <code>{{ config.odoo_username }}</code>
+                    </div>
+                    {% else %}
+                    <div class="alert warning">
+                        ⚠️ No hay configuración. Ve a <a href="/config">Configuración</a> para configurar Odoo.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function testConnection() {
+            const statusEl = document.getElementById('connection-status');
+            statusEl.textContent = 'Probando...';
+            statusEl.className = 'status testing';
+
+            try {
+                const response = await fetch('/api/test-connection', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    statusEl.textContent = '✅ ' + data.message;
+                    statusEl.className = 'status ok';
+                } else {
+                    statusEl.textContent = '❌ ' + data.message;
+                    statusEl.className = 'status error';
+                }
+            } catch (error) {
+                statusEl.textContent = '❌ Error de conexión';
+                statusEl.className = 'status error';
+            }
+        }
+
+        function copyUrl() {
+            const url = document.getElementById('mcp-url').textContent;
+            navigator.clipboard.writeText(url);
+            alert('URL copiada: ' + url);
+        }
+
+        // Auto-refresh cada 30 segundos
+        setInterval(() => {
+            fetch('/api/status')
+                .then(r => r.json())
+                .then(data => console.log('Status:', data));
+        }, 30000);
+    </script>
+</body>
+</html>

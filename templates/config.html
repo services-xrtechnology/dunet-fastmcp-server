@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Dunet FastMCP</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚙️ Configuración</h1>
+            <p class="subtitle">Dunet FastMCP Server</p>
+        </header>
+
+        <nav>
+            <a href="/">Dashboard</a>
+            <a href="/config" class="active">Configuración</a>
+            <a href="/logs">Logs</a>
+            <a href="/mcp" target="_blank">MCP Endpoint</a>
+        </nav>
+
+        <div class="config-form">
+            <h2>Conexión a Odoo</h2>
+
+            <form id="configForm" onsubmit="saveConfig(event)">
+                <div class="form-group">
+                    <label for="odoo_url">URL de Odoo</label>
+                    <input type="url" id="odoo_url" name="odoo_url"
+                           value="{% if config %}{{ config.odoo_url }}{% endif %}"
+                           placeholder="https://www.doonet.app"
+                           required>
+                    <small>URL pública de tu Odoo (con https://)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="odoo_db">Base de Datos</label>
+                    <input type="text" id="odoo_db" name="odoo_db"
+                           value="{% if config %}{{ config.odoo_db }}{% endif %}"
+                           placeholder="doonet"
+                           required>
+                    <small>Nombre de la base de datos</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="odoo_username">Usuario</label>
+                    <input type="email" id="odoo_username" name="odoo_username"
+                           value="{% if config %}{{ config.odoo_username }}{% endif %}"
+                           placeholder="admin@doonet.app"
+                           required>
+                    <small>Email del usuario con permisos</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="odoo_password">Contraseña</label>
+                    <input type="password" id="odoo_password" name="odoo_password"
+                           placeholder="••••••••"
+                           required>
+                    <small>Contraseña del usuario</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Guardar Configuración</button>
+                    <button type="button" onclick="testBeforeSave()" class="btn-secondary">Probar Conexión</button>
+                </div>
+
+                <div id="message" class="message"></div>
+            </form>
+
+            <div class="help-section">
+                <h3>💡 Ayuda</h3>
+                <ul>
+                    <li><strong>URL de Odoo:</strong> Debe ser accesible públicamente. Si estás en desarrollo, usa ngrok.</li>
+                    <li><strong>Usuario:</strong> Debe tener permisos para crear partners, cotizaciones, y acceso a modelos MCP.</li>
+                    <li><strong>Seguridad:</strong> Los datos se guardan localmente y solo se usan para conectar a Odoo.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function saveConfig(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const config = {
+                odoo_url: formData.get('odoo_url'),
+                odoo_db: formData.get('odoo_db'),
+                odoo_username: formData.get('odoo_username'),
+                odoo_password: formData.get('odoo_password')
+            };
+
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = 'Guardando...';
+            messageEl.className = 'message info';
+
+            try {
+                const response = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageEl.textContent = '✅ Configuración guardada correctamente';
+                    messageEl.className = 'message success';
+
+                    // Redirect a dashboard en 2 segundos
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                } else {
+                    messageEl.textContent = '❌ Error: ' + data.detail;
+                    messageEl.className = 'message error';
+                }
+            } catch (error) {
+                messageEl.textContent = '❌ Error guardando configuración';
+                messageEl.className = 'message error';
+            }
+        }
+
+        async function testBeforeSave() {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = 'Probando conexión...';
+            messageEl.className = 'message info';
+
+            try {
+                const response = await fetch('/api/test-connection', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    messageEl.textContent = '✅ ' + data.message + ' (UID: ' + data.uid + ')';
+                    messageEl.className = 'message success';
+                } else {
+                    messageEl.textContent = '❌ ' + data.message;
+                    messageEl.className = 'message error';
+                }
+            } catch (error) {
+                messageEl.textContent = '❌ Error probando conexión';
+                messageEl.className = 'message error';
+            }
+        }
+    </script>
+</body>
+</html>

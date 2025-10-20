@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logs - Dunet FastMCP</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 Logs del Servidor</h1>
+            <p class="subtitle">Dunet FastMCP Server</p>
+        </header>
+
+        <nav>
+            <a href="/">Dashboard</a>
+            <a href="/config">Configuración</a>
+            <a href="/logs" class="active">Logs</a>
+            <a href="/mcp" target="_blank">MCP Endpoint</a>
+        </nav>
+
+        <div class="logs-container">
+            <div class="logs-header">
+                <h2>Últimas 100 entradas</h2>
+                <button onclick="refreshLogs()" class="btn-refresh">🔄 Actualizar</button>
+            </div>
+
+            <div class="logs-list" id="logs-list">
+                {% if logs %}
+                    {% for log in logs %}
+                    <div class="log-entry level-{{ log.level|lower }}">
+                        <span class="log-time">{{ log.timestamp }}</span>
+                        <span class="log-level">{{ log.level }}</span>
+                        <span class="log-tool">{{ log.tool_name }}</span>
+                        <span class="log-message">{{ log.message }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-logs">
+                        <p>📭 No hay logs aún</p>
+                        <small>Los logs aparecerán cuando las herramientas se usen</small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function refreshLogs() {
+            location.reload();
+        }
+
+        // Auto-refresh cada 10 segundos
+        setInterval(refreshLogs, 10000);
+    </script>
+</body>
+</html>

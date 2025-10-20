@@ -7,6 +7,10 @@ import os
 import xmlrpc.client
 from typing import Optional
 from fastmcp import FastMCP
+from dotenv import load_dotenv
+
+# Cargar .env si existe
+load_dotenv()
 
 # Configuración desde variables de entorno
 ODOO_URL = os.getenv('ODOO_URL', 'http://localhost:8069')
