@@ -34,10 +34,9 @@ services:
     instance_count: 1
     instance_size_slug: basic-xxs
 
-    # Health check - Deshabilitado porque FastMCP usa SSE
-    # Digital Ocean no soporta bien health checks en servidores SSE
+    # Health check
     health_check:
-      http_path: /
+      http_path: /health
       initial_delay_seconds: 30
       period_seconds: 60
       timeout_seconds: 10

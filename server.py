@@ -121,6 +121,11 @@ def crear_cotizacion_dunet(
         }
 
 
+@mcp.get("/health")
+def health_check():
+    """Health check para Digital Ocean"""
+    return {"status": "ok", "service": "dunet-fastmcp", "tools": 2}
+
 if __name__ == "__main__":
     # Iniciar servidor FastMCP
     print("="*60)
