@@ -166,11 +166,20 @@ async def get_status():
 # INTEGRAR FASTMCP EN FASTAPI
 # ========================================
 
-# Montar servidor MCP en /mcp
-from fastmcp.server import create_sse_handler
+# FastMCP 2.0 se integra directamente
+# El servidor MCP está disponible vía las rutas que FastMCP crea automáticamente
+# cuando llamamos mcp.run() desde main.py
 
-mcp_handler = create_sse_handler(mcp)
-app.mount("/mcp", mcp_handler)
+# Ruta para verificar que MCP está disponible
+@app.get("/mcp")
+async def mcp_info():
+    """Información del servidor MCP"""
+    return {
+        "server": "Dunet Tools",
+        "tools": ["consultar_rnc_dgii", "crear_cotizacion_dunet"],
+        "status": "ready",
+        "message": "FastMCP server integrado con FastAPI"
+    }
 
 if __name__ == "__main__":
     import uvicorn

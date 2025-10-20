@@ -1,1 +1,1 @@
-web: python3 main.py
+web: fastmcp run simple_server.py:mcp --transport sse --port $PORT
