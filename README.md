@@ -1,50 +1,35 @@
-# Servidor FastMCP para Dunet
+# 🚀 Dunet FastMCP Server
 
-Servidor FastMCP 2.0 que expone herramientas de Odoo para agentes de IA.
+Servidor FastMCP con portal de administración web para gestionar herramientas de IA conectadas a Odoo.
 
-## Instalación
+## ✨ Características
 
-### 1. Instalar dependencias:
-```bash
-pip3 install -r requirements.txt
-```
+- 🎛️ **Portal de Administración Web** - Configuración visual
+- 🔧 **2 Herramientas MCP**: consultar_rnc_dgii, crear_cotizacion_dunet
+- 📊 **Dashboard de Monitoreo** - Estado en tiempo real
+- 📋 **Logs en Vivo**
+- 🚀 **Auto-Deploy** en Digital Ocean
 
-### 2. Configurar variables de entorno:
-```bash
-cp .env.example .env
-# Editar .env con tus credenciales
-```
+## 🎯 URLs
 
-### 3. Iniciar servidor:
-```bash
-python3 server.py
-```
+- Portal Admin: http://localhost:8070
+- MCP Endpoint: http://localhost:8070/mcp
+- API Docs: http://localhost:8070/docs
 
-El servidor estará disponible en: `http://localhost:8070/mcp`
+## 📦 Deploy Digital Ocean
 
-## Herramientas Disponibles
+1. Apps → Create App
+2. Conectar repo GitHub
+3. Configurar ODOO_PASSWORD (secret)
+4. Deploy
 
-### consultar_rnc_dgii
-Consulta RNC o Cédula en portal DGII.
-
-### crear_cotizacion_dunet
-Crea cotización en Odoo automáticamente.
-
-## Deploy en FastMCP Cloud
-
-1. Subir a GitHub
-2. Conectar en https://fastmcp.cloud
-3. Configurar variables de entorno
-4. Deploy automático
-
-URL resultante: `https://dunet-tools.fastmcp.app/mcp`
-
-## Uso con ElevenLabs
-
-Dashboard → Agent → Tools → Add MCP Server → URL del FastMCP
-
-## Uso con Claude Code
+## 💻 Desarrollo Local
 
 ```bash
-claude mcp add dunet --url http://localhost:8070/mcp
+pip install -r requirements.txt
+python3 main.py
 ```
+
+## 📞 Soporte
+
+xavier@xrtechnology.com.do
