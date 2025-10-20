@@ -10,10 +10,10 @@ services:
       deploy_on_push: true
 
     # Comando para iniciar la app
-    run_command: uvicorn app.main:app --host 0.0.0.0 --port 8070
+    run_command: uvicorn app.main:app --host 0.0.0.0 --port 8080
 
-    # Puerto HTTP
-    http_port: 8070
+    # Puerto HTTP (Digital Ocean usa 8080 por defecto)
+    http_port: 8080
 
     # Variables de entorno (configurables desde DO dashboard)
     envs:
