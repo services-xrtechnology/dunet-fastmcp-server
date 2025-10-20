@@ -121,24 +121,5 @@ def crear_cotizacion_dunet(
         }
 
 
-# Health check será manejado por el wrapper de FastAPI en app/main.py
-# FastMCP no soporta rutas HTTP custom directamente
-
-if __name__ == "__main__":
-    # Iniciar servidor FastMCP
-    print("="*60)
-    print("🚀 DUNET FASTMCP SERVER 2.0")
-    print("="*60)
-    print(f"📡 Odoo: {ODOO_URL}")
-    print(f"💾 Database: {ODOO_DB}")
-    print(f"👤 User: {ODOO_USERNAME}")
-    print(f"🔌 Modo: HTTP (puerto 8070)")
-    print("="*60)
-    print(f"🛠️  Herramientas disponibles:")
-    print(f"   1. consultar_rnc_dgii")
-    print(f"   2. crear_cotizacion_dunet")
-    print("="*60)
-    print(f"✅ Servidor listo\n")
-
-    # Correr en modo HTTP para que ElevenLabs se conecte
-    mcp.run(transport='sse', port=8070, host='0.0.0.0')
+# Este archivo solo define las herramientas MCP
+# El servidor se inicia desde main.py o app/main.py
