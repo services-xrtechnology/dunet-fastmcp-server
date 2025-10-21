@@ -1,35 +1,41 @@
 # 🚀 Dunet FastMCP Server
 
-Servidor FastMCP con portal de administración web para gestionar herramientas de IA conectadas a Odoo.
+Servidor FastMCP 2.0 con herramientas de IA para Odoo.
 
-## ✨ Características
+## 🛠️ Herramientas
 
-- 🎛️ **Portal de Administración Web** - Configuración visual
-- 🔧 **2 Herramientas MCP**: consultar_rnc_dgii, crear_cotizacion_dunet
-- 📊 **Dashboard de Monitoreo** - Estado en tiempo real
-- 📋 **Logs en Vivo**
-- 🚀 **Auto-Deploy** en Digital Ocean
+- **consultar_rnc_dgii**: Consulta RNC/Cédula en DGII
+- **crear_cotizacion_dunet**: Crea cotizaciones en Odoo
 
-## 🎯 URLs
+## 🌐 Servidor en Producción
 
-- Portal Admin: http://localhost:8070
-- MCP Endpoint: http://localhost:8070/mcp
-- API Docs: http://localhost:8070/docs
+**IP:** 173.230.131.241
+**Endpoint HTTP:** http://173.230.131.241:8070/mcp
+**Transport:** HTTP Streamable (estándar MCP 2025)
 
-## 📦 Deploy Digital Ocean
+## 🔌 Conectar con IA
 
-1. Apps → Create App
-2. Conectar repo GitHub
-3. Configurar ODOO_PASSWORD (secret)
-4. Deploy
+### ElevenLabs (requiere HTTPS):
+Usa ngrok o SSL: `https://tu-url/mcp`
 
-## 💻 Desarrollo Local
-
-```bash
-pip install -r requirements.txt
-python3 main.py
+### Claude Desktop:
+```json
+{
+  "mcpServers": {
+    "dunet": {
+      "command": "curl",
+      "args": ["-N", "http://173.230.131.241:8070/mcp"]
+    }
+  }
+}
 ```
 
-## 📞 Soporte
+## 💻 Ejecutar
 
-xavier@xrtechnology.com.do
+```bash
+python3 simple_server.py
+```
+
+## 📦 Deploy
+
+Ver `install_production.sh` para instalación completa con systemd.

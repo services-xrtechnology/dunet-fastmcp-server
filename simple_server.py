@@ -61,3 +61,22 @@ def crear_cotizacion_dunet(
         )
     except Exception as e:
         return {'success': False, 'error': str(e)}
+
+# Iniciar servidor con HTTP Streamable (estándar MCP 2025)
+if __name__ == "__main__":
+    print("="*60)
+    print("🚀 DUNET FASTMCP SERVER")
+    print("="*60)
+    print(f"📡 Odoo: {ODOO_URL}")
+    print(f"💾 Database: {ODOO_DB}")
+    print(f"🔌 Transport: HTTP Streamable")
+    print(f"🌐 Endpoint: http://0.0.0.0:8070/mcp")
+    print("="*60)
+    print("🛠️  Herramientas:")
+    print("   1. consultar_rnc_dgii")
+    print("   2. crear_cotizacion_dunet")
+    print("="*60)
+    print("✅ Servidor listo\n")
+
+    # HTTP Streamable (nuevo estándar MCP marzo 2025)
+    mcp.run(transport='http', host='0.0.0.0', port=8070, path='/mcp')
